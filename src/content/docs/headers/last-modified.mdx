@@ -1,0 +1,30 @@
+---
+title: "Last-Modified"
+description: "Indicates the exact date and time the requested resource was last changed."
+---
+
+## General Summary
+
+Indicates the exact date and time the requested resource was last changed.
+
+## Detailed Description
+
+The `Last-Modified` response HTTP header contains the date and time at which the origin server believes the resource was last modified. It is used as a validator to determine if a cache is still fresh. While less accurate than an `ETag` (which uses content hashes), it serves as a reliable fallback for conditional GET requests.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+Servers often attach this automatically when serving static files directly from a filesystem, checking the file's modification timestamp.
+
+### Why to Use It
+If a browser has a cached version of a file, it will send an `If-Modified-Since` request on subsequent visits. The server checks the file's current timestamp against the header. If it hasn't changed, the server instantly replies with a `304 Not Modified`, saving massive amounts of bandwidth.
+
+### How to Use It
+The value must be formatted as an HTTP-date.
+`Last-Modified: Wed, 21 Oct 2015 07:28:00 GMT`
+
+## Example
+
+```http
+Last-Modified: Wed, 21 Oct 2015 07:28:00 GMT
+```

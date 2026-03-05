@@ -1,0 +1,30 @@
+---
+title: "If-None-Match"
+description: "Makes a request conditional based on ETag validation to update caches or prevent overwrites."
+---
+
+## General Summary
+
+Makes a request conditional based on ETag validation to update caches or prevent overwrites.
+
+## Detailed Description
+
+The `If-None-Match` request HTTP header makes the request conditional. For `GET` and `HEAD` methods, the server will return the requested resource only if it doesn't match any of the `ETag` strings provided in this header. If it does match, the server returns a 304 Not Modified. For state-changing methods like `PUT`, it ensures an operation only succeeds if the resource doesn't already exist on the server.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+This is primarily used under the hood by browsers to validate cached assets. As an API developer, you handle this incoming header to implement cache validation.
+
+### Why to Use It
+It perfectly couples with the `ETag` header to eliminate redundant data transfers required for fetching large static files or database payloads that haven't changed.
+
+### How to Use It
+The browser takes the `ETag` it received from the server previously, and attaches it to this header on the next request.
+`If-None-Match: "33a64df551425fcc55e4d42a148795d9f25f89d4"`
+
+## Example
+
+```http
+If-None-Match: "686897696a7c876b7e"
+```

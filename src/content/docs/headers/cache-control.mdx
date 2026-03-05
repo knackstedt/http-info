@@ -1,0 +1,37 @@
+---
+title: "Cache-Control"
+description: "Holds precise instructions for controlling caching behavior across browsers and shared proxy caches."
+---
+
+## General Summary
+
+Holds precise instructions for controlling caching behavior across browsers and shared proxy caches.
+
+## Detailed Description
+
+The `Cache-Control` HTTP header defines the rules for how, when, and for how long a response or request should be cached. It is uniquely powerful because it can be used in both requests and responses, and its directives are universally respected by browsers, CDNs, and intermediate proxy servers. Unlike older caching headers, `Cache-Control` supports multiple comma-separated directives to create complex caching policies.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+Use this on almost every response in a production system. You use it to aggressively cache static assets indefinitely, and to strictly prevent caching of dynamic, personalized API payloads.
+
+### Why to Use It
+Proper use of `Cache-Control` is the largest single factor in website performance optimization. Bypassing unnecessary round trips to the server drastically reduces load times for users and cuts compute costs for backend infrastructure.
+
+### How to Use It
+You combine directives to enforce your caching policy.
+
+- **Static Assets** (Fonts, JS bundles, images):
+  `Cache-Control: public, max-age=31536000, immutable`
+  *This tells the CDN and browser to cache the file for 1 year and assume it will never change.*
+
+- **Private API Data** (User profiles, financial info):
+  `Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate`
+  *This strictly forbids storing the payload anywhere, forcing a fresh network request every time.*
+
+## Example
+
+```http
+Cache-Control: public, max-age=86400
+```

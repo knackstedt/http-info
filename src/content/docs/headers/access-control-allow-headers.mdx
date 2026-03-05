@@ -1,0 +1,34 @@
+---
+title: "Access-Control-Allow-Headers"
+description: "Declares which custom HTTP headers can be sent in a cross-origin request."
+---
+
+## General Summary
+
+Declares which custom HTTP headers can be sent in a cross-origin request.
+
+## Detailed Description
+
+The `Access-Control-Allow-Headers` response header handles CORS preflight checks specifically for custom request headers. If a frontend attempts to send non-standard headers (like `Authorization` or `X-Custom-Token`), the server must explicitly whitelist those headers using this mechanism before the browser allows the actual request to proceed.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+Configure your backend to return this header during `OPTIONS` requests if your API endpoints expect Bearer tokens, custom API keys, or custom content-types from frontend apps.
+
+### Why to Use It
+Without it, browsers will intercept and block the request, resulting in the dreaded `CORS Missing Allow Header` error in the console.
+
+### How to Use It
+List the exact headers the frontend is allowed to send.
+`Access-Control-Allow-Headers: Authorization, Content-Type, X-Api-Key`
+
+## Example
+
+```http
+Access-Control-Allow-Headers: Content-Type, Authorization
+```
+
+:::tip
+Revisit the [CORS Reference Guide](/reference/cors) for an overview of how these headers interact.
+:::

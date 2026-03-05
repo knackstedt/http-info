@@ -1,0 +1,32 @@
+---
+title: "Sec-CH-DPR"
+description: "Request header that provides the client device pixel ratio (the number of physical device pixels for each CSS pixel)."
+---
+
+## General Summary
+
+Request header that provides the client device pixel ratio (the number of physical device pixels for each CSS pixel).
+
+## Detailed Description
+
+The `Sec-CH-DPR` HTTP header is a specialized field used to request header that provides the client device pixel ratio (the number of physical device pixels for each CSS pixel). It acts as a signaling mechanism between the client and the server to enforce policies, negotiate capabilities, or provide telemetry data during the transmission of requests and responses.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+This header is primarily utilized when the client or browser needs to declare its context or capabilities prior to establishing the transaction. Modern web applications rely on this to maintain state and context.
+
+### Why to Use It
+It facilitates seamless programmatic integration by ensuring both the client and server agree on the terms of the transaction, greatly improving performance, security, and rendering correctness without manual user intervention.
+
+### How to Use It
+Implement or parse this header within your application's network layer (such as an Express middleware or a Next.js edge function) by reading or attaching the key-value pair:
+```http
+Sec-CH-DPR: <appropriate-value>
+```
+
+## Example
+
+```http
+Sec-CH-DPR: <value>
+```

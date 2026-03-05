@@ -1,0 +1,34 @@
+---
+title: "Access-Control-Allow-Methods"
+description: "Informs the browser which HTTP methods are permitted for cross-origin requests."
+---
+
+## General Summary
+
+Informs the browser which HTTP methods are permitted for cross-origin requests.
+
+## Detailed Description
+
+The `Access-Control-Allow-Methods` response header is used during CORS preflight requests. When a client wants to send a complex cross-origin request (e.g. using `PUT` or `DELETE`), the browser auto-sends an `OPTIONS` request first. The server responds with this header to declare which HTTP methods it supports for the given resource.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+Set this on your server's `OPTIONS` route handlers whenever you run an API that accepts state-changing actions from remote sites.
+
+### Why to Use It
+It prevents browsers from sending blind `DELETE` requests to foreign servers that don't explicitly opt-in to receiving them.
+
+### How to Use It
+Supply a comma-separated list of the allowed verbs.
+`Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS`
+
+## Example
+
+```http
+Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE
+```
+
+:::tip
+Revisit the [CORS Reference Guide](/reference/cors) for an overview of how these headers interact.
+:::

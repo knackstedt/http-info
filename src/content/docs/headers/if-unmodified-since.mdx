@@ -1,0 +1,32 @@
+---
+title: "If-Unmodified-Since"
+description: "Makes the request conditional, and expects the resource to be transmitted only if it has not been modified after the given date. This ensures the coherence of a new fragment of a specific range with previous ones, or to implement an optimistic concurrency control system when modifying existing documents."
+---
+
+## General Summary
+
+Makes the request conditional, and expects the resource to be transmitted only if it has not been modified after the given date. This ensures the coherence of a new fragment of a specific range with previous ones, or to implement an optimistic concurrency control system when modifying existing documents.
+
+## Detailed Description
+
+The `If-Unmodified-Since` HTTP header is a specialized field used to makes the request conditional, and expects the resource to be transmitted only if it has not been modified after the given date. This ensures the coherence of a new fragment of a specific range with previous ones, or to implement an optimistic concurrency control system when modifying existing documents. It acts as a signaling mechanism between the client and the server to enforce policies, negotiate capabilities, or provide telemetry data during the transmission of requests and responses.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+This header is primarily utilized when the client or browser needs to declare its context or capabilities prior to establishing the transaction. Modern web applications rely on this to maintain state and context.
+
+### Why to Use It
+It facilitates seamless programmatic integration by ensuring both the client and server agree on the terms of the transaction, greatly improving performance, security, and rendering correctness without manual user intervention.
+
+### How to Use It
+Implement or parse this header within your application's network layer (such as an Express middleware or a Next.js edge function) by reading or attaching the key-value pair:
+```http
+If-Unmodified-Since: <appropriate-value>
+```
+
+## Example
+
+```http
+If-Unmodified-Since: <value>
+```

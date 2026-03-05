@@ -1,0 +1,30 @@
+---
+title: "Strict-Transport-Security"
+description: "Forces browsers to exclusively load the site over secure HTTPS connections."
+---
+
+## General Summary
+
+Forces browsers to exclusively load the site over secure HTTPS connections.
+
+## Detailed Description
+
+The `Strict-Transport-Security` (HSTS) response header is a critical security mechanism that protects websites against protocol downgrade attacks and cookie hijacking. When a browser sees this header from a site, it remembers that domain, and automatically upgrades any future `http://` attempts to `https://` before the network request even leaves the device.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+Apply this header globally across your entire domain and API once you have a verified, stable SSL/TLS certificate installed.
+
+### Why to Use It
+Even if a user manually types `http://example.com`, HSTS prevents them from ever hitting the unencrypted network where a man-in-the-middle attacker could intercept their initial request and steal their cookies.
+
+### How to Use It
+You specify a `max-age` (in seconds) for the browser to remember the rule. Including `includeSubDomains` expands the protection.
+`Strict-Transport-Security: max-age=63072000; includeSubDomains; preload`
+
+## Example
+
+```http
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+```

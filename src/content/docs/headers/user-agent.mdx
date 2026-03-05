@@ -1,0 +1,30 @@
+---
+title: "User-Agent"
+description: "Identifies the software, browser, and operating system originating the request."
+---
+
+## General Summary
+
+Identifies the software, browser, and operating system originating the request.
+
+## Detailed Description
+
+The `User-Agent` request header contains a characteristic string that allows the receiving server to identify the application type, operating system, software vendor, or software version of the requesting user agent. It has historically been a critical piece of metadata for web servers.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+Browsers, bots, web scrapers, and cURL automatically attach this to every outward request.
+
+### Why to Use It
+Servers analyze this header for analytics (browser market share), formatting content (serving a mobile layout vs desktop layout), or security (blocking known malicious bots like `curl` or headless browsers on sensitive routes).
+
+### How to Use It
+The format often includes Mozilla compatibility flags, the OS, and the rendering engine.
+`User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0`
+
+## Example
+
+```http
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+```

@@ -1,0 +1,32 @@
+---
+title: "Sec-WebSocket-Version"
+description: "In requests, this header indicates the version of the WebSocket protocol used by the client. In responses, it is sent only if the requested protocol version is not supported by the server, and lists the versions that the server supports."
+---
+
+## General Summary
+
+In requests, this header indicates the version of the WebSocket protocol used by the client. In responses, it is sent only if the requested protocol version is not supported by the server, and lists the versions that the server supports.
+
+## Detailed Description
+
+The `Sec-WebSocket-Version` HTTP header is a specialized field used to in requests, this header indicates the version of the WebSocket protocol used by the client. In responses, it is sent only if the requested protocol version is not supported by the server, and lists the versions that the server supports. It acts as a signaling mechanism between the client and the server to enforce policies, negotiate capabilities, or provide telemetry data during the transmission of requests and responses.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+This header is primarily utilized when the server needs to govern the response behavior. Modern web applications rely on this to maintain state and context.
+
+### Why to Use It
+It facilitates seamless programmatic integration by ensuring both the client and server agree on the terms of the transaction, greatly improving performance, security, and rendering correctness without manual user intervention.
+
+### How to Use It
+Implement or parse this header within your application's network layer (such as an Express middleware or a Next.js edge function) by reading or attaching the key-value pair:
+```http
+Sec-WebSocket-Version: <appropriate-value>
+```
+
+## Example
+
+```http
+Sec-WebSocket-Version: <value>
+```

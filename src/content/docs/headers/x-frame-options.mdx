@@ -1,0 +1,31 @@
+---
+title: "X-Frame-Options"
+description: "Prevents the page from being embedded inside frames or iframes on other sites to mitigate Clickjacking."
+---
+
+## General Summary
+
+Prevents the page from being embedded inside frames or iframes on other sites to mitigate Clickjacking.
+
+## Detailed Description
+
+The `X-Frame-Options` (XFO) response header is a crucial security control that dictates whether a browser should be allowed to render a page in a `<frame>`, `<iframe>`, `<embed>` or `<object>`. It was introduced specifically to eliminate Clickjacking attacks, where an invisible iframe is overlaid on a malicious site to trick users into clicking buttons on the victim's site.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+You should include this header on all HTML documents returned by your server, unless your specific business model relies on third parties embedding your application (e.g. a YouTube video embed).
+
+### Why to Use It
+If an authenticated user is tricked into visiting a malicious site that invisibly embeds your banking app's "Transfer Funds" button, clicking the blank page could unwittingly trigger the transfer. XFO stops the browser from rendering the iframe entirely.
+
+### How to Use It
+There are two primary directives used today:
+- `X-Frame-Options: DENY` (The page cannot be displayed in a frame, regardless of the site attempting to do so).
+- `X-Frame-Options: SAMEORIGIN` (The page can only be displayed in a frame on the exact same origin as the page itself).
+
+## Example
+
+```http
+X-Frame-Options: DENY
+```

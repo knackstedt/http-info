@@ -1,0 +1,38 @@
+---
+title: "Authorization"
+description: "Transmits credentials to the server to authenticate the user taking the action."
+---
+
+## General Summary
+
+Transmits credentials to the server to authenticate the user taking the action.
+
+## Detailed Description
+
+The `Authorization` request HTTP header contains the credentials used to verify a user agent's identity with a server. This typically follows a 401 Unauthorized response from a server indicating that authentication is required to access the requested resource. The header consists of two parts: the authentication scheme (such as Basic or Bearer) and the actual credentials payload.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+You must send this header whenever a user attempts to access protected routes, fetch private data, or perform state-changing operations that require a verified identity.
+
+### Why to Use It
+Without it, servers cannot distinguish between requests from authorized users and anonymous visitors. It replaces stateful architectures like session cookies with stateless verification mechanisms like JWTs.
+
+### How to Use It
+Most modern web APIs expect a `Bearer` token scheme. Once a user logs in and receives a JSON Web Token (JWT) or OAuth access token, the client stores it and attaches it to all subsequent requests.
+
+*Example code in Javascript:*
+```javascript
+fetch('https://api.example.com/user', {
+  headers: {
+    'Authorization': `Bearer ${token}`
+  }
+});
+```
+
+## Example
+
+```http
+Authorization: Bearer [your-jwt-token]
+```

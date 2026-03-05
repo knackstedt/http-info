@@ -1,0 +1,30 @@
+---
+title: "Accept-Encoding"
+description: "Informs the server which compression algorithms the client can natively decompress."
+---
+
+## General Summary
+
+Informs the server which compression algorithms the client can natively decompress.
+
+## Detailed Description
+
+The `Accept-Encoding` request HTTP header advertises exactly which content encoding algorithms (like gzip or brotli) the client is capable of parsing. Using this information, the server chooses one of the supported algorithms, compresses the response body, and sends it back to the client along with a `Content-Encoding` header declaring which algorithm was ultimately chosen.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+Browsers automatically send this header on all requests. API clients (like `axios` or Python's `requests`) usually send it under the hood as well.
+
+### Why to Use It
+Compression drastically reduces the size of text-based payloads like HTML, CSS, JavaScript, and JSON over the wire (often by 70-90%). If a client omits this header, the server must assume the client cannot handle compression and must send the full, uncompressed payload.
+
+### How to Use It
+It accepts a comma-separated list of algorithms. Modern browsers typically advertise `gzip`, `deflate`, and `br` (Brotli).
+`Accept-Encoding: gzip, deflate, br`
+
+## Example
+
+```http
+Accept-Encoding: gzip, deflate, br
+```

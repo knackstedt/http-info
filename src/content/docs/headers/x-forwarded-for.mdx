@@ -1,0 +1,34 @@
+---
+title: "X-Forwarded-For"
+description: "Identifies the original IP address of a client connecting through a proxy or load balancer."
+---
+
+## General Summary
+
+Identifies the original IP address of a client connecting through a proxy or load balancer.
+
+## Detailed Description
+
+The `X-Forwarded-For` (XFF) header is a de-facto standard request header for identifying the originating IP address of a client connecting to a web server through an HTTP proxy or load balancer. Without this header, the backend server would incorrectly assume the IP address of the load balancer was the user's actual IP.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+Load balancers (like AWS ALB or Nginx) automatically inject this header into HTTP requests before forwarding them to internal backend servers.
+
+### Why to Use It
+It is essential for logging, geographic IP routing, and rate-limiting. If your backend rate-limits based on the immediate TCP connection IP, it will end up rate-limiting your own load balancer and taking the site offline.
+
+### How to Use It
+It is a comma-separated list of IP addresses. The first IP is the original client, and subsequent IPs represent proxies the request passed through.
+`X-Forwarded-For: 203.0.113.195, 70.41.3.18, 150.172.238.178`
+
+:::caution[IP Spoofing Risk]
+Because this is just a standard HTTP header, a malicious client can forge it (e.g., `X-Forwarded-For: 127.0.0.1`) to bypass rate limits or IP allowlists. Your application **MUST** be configured to only trust the `X-Forwarded-For` header if the request definitively originated from an explicitly trusted proxy or load balancer.
+:::
+
+## Example
+
+```http
+X-Forwarded-For: 203.0.113.195, 70.41.3.18
+```

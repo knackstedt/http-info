@@ -1,0 +1,31 @@
+---
+title: "Accept"
+description: "Tells the server what format of data the client is expecting to receive."
+---
+
+## General Summary
+
+Tells the server what format of data the client is expecting to receive.
+
+## Detailed Description
+
+The `Accept` request HTTP header specifies the content types (expressed as MIME types) that a client can understand and prefers to receive in response to a request. This is a primary driver of a process called **Content Negotiation**, where the server uses the `Accept` header to decide which representation of the resource to send back when multiple are available (e.g., returning JSON instead of HTML).
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+Client applications (like web browsers or API consumers) automatically send this header to ensure they receive data in a format they can parse.
+
+### Why to Use It
+It decouples the client and server by allowing a single API endpoint to serve multiple formats depending on who is asking for it. This prevents the need for format-specific URLs like `/data.json` or `/data.xml`.
+
+### How to Use It
+You provide a comma-separated list of MIME types. You can also append a relative quality factor (`q=0.8` to `q=1.0`) to indicate a preference weighting for different types.
+- **Browsers**: Automatically attach `Accept: text/html,application/xhtml+xml...` when navigating to pages.
+- **API Calls**: When using `fetch()` or `axios` in Javascript, you often manually set `Accept: application/json` so the backend knows you want a JSON response instead of a rendered view.
+
+## Example
+
+```http
+Accept: application/json, text/plain, */*
+```

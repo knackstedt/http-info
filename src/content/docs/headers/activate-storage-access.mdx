@@ -1,0 +1,32 @@
+---
+title: "Activate-Storage-Access"
+description: "Used in response to Sec-Fetch-Storage-Access to indicate that the browser can activate an existing permission for secure access and retry the request with cookies, or load a resource with cookie access if it already has an activated permission."
+---
+
+## General Summary
+
+Used in response to Sec-Fetch-Storage-Access to indicate that the browser can activate an existing permission for secure access and retry the request with cookies, or load a resource with cookie access if it already has an activated permission.
+
+## Detailed Description
+
+The `Activate-Storage-Access` HTTP header is a specialized field used to used in response to Sec-Fetch-Storage-Access to indicate that the browser can activate an existing permission for secure access and retry the request with cookies, or load a resource with cookie access if it already has an activated permission. It acts as a signaling mechanism between the client and the server to enforce policies, negotiate capabilities, or provide telemetry data during the transmission of requests and responses.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+This header is primarily utilized when the server needs to govern the response behavior. Modern web applications rely on this to maintain state and context.
+
+### Why to Use It
+It facilitates seamless programmatic integration by ensuring both the client and server agree on the terms of the transaction, greatly improving performance, security, and rendering correctness without manual user intervention.
+
+### How to Use It
+Implement or parse this header within your application's network layer (such as an Express middleware or a Next.js edge function) by reading or attaching the key-value pair:
+```http
+Activate-Storage-Access: <appropriate-value>
+```
+
+## Example
+
+```http
+Activate-Storage-Access: <value>
+```

@@ -1,0 +1,31 @@
+---
+title: "Location"
+description: "Indicates the destination URL when redirecting a browser or creating a new resource."
+---
+
+## General Summary
+
+Indicates the destination URL when redirecting a browser or creating a new resource.
+
+## Detailed Description
+
+The `Location` response HTTP header provides the URL to which an entity or a browser should be redirected. It is the core mechanism driving HTTP redirects on the web.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+It is universally used in two scenarios: First, when returning a 3xx status code (like `301 Moved Permanently` or `302 Found`) to redirect the user to a new web page. Second, when responding with a `201 Created` to indicate the URL of a newly minted REST API resource.
+
+### Why to Use It
+Without the `Location` header, returning a 302 status code does nothing; the browser needs to know precisely *where* to go. On `201 Created` responses, it saves the client from having to guess the ID or URL of the newly created object.
+
+### How to Use It
+Simply provide the absolute or relative URL.
+`Location: /dashboard`
+`Location: https://new-domain.com/login`
+
+## Example
+
+```http
+Location: https://example.com/login
+```

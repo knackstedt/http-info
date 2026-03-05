@@ -1,0 +1,30 @@
+---
+title: "X-Content-Type-Options"
+description: "Forces the browser to strictly honor the declared Content-Type, mitigating MIME sniffing vulnerabilities."
+---
+
+## General Summary
+
+Forces the browser to strictly honor the declared Content-Type, mitigating MIME sniffing vulnerabilities.
+
+## Detailed Description
+
+The `X-Content-Type-Options` response header is a security feature that prevents the browser from "MIME sniffing". Historically, browsers would try to guess the content type of a file by inspecting its byte signatures if the server returned an incorrect or missing `Content-Type`. This meant an attacker could upload a `.jpg` file containing malicious Javascript, and the browser might "sniff" the Javascript and execute it.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+You should unconditionally apply this header globally to all responses leaving your server, especially APIs returning JSON and servers hosting user-uploaded content.
+
+### Why to Use It
+It enforces strict data classification. If your server returns `Content-Type: text/plain` or `application/json`, the browser will flat-out refuse to execute it as a script or render it as an HTML page, completely neutralizing polyglot file attacks.
+
+### How to Use It
+There is only one valid value for this header, which instructs the browser to never sniff the payload.
+`X-Content-Type-Options: nosniff`
+
+## Example
+
+```http
+X-Content-Type-Options: nosniff
+```

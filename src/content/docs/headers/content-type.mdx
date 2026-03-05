@@ -1,0 +1,36 @@
+---
+title: "Content-Type"
+description: "Tells the recipient exactly what type of data is inside the request or response body."
+---
+
+## General Summary
+
+Tells the recipient exactly what type of data is inside the request or response body.
+
+## Detailed Description
+
+The `Content-Type` entity header specifies the original media type (MIME type) of the resource or data structure being transmitted in the HTTP body. Unlike the `Accept` header which negotiates *what to send back*, the `Content-Type` header declares *what is currently being sent*. It is crucial for ensuring the receiver parses the byte stream correctly.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+You must include this header on any request (`POST`, `PUT`, `PATCH`) that contains a data payload, and on every response from a server that contains a body.
+
+### Why to Use It
+A server receiving a `POST` request with JSON data won't inherently know it is JSON without this header. It might assume it is standard URL-encoded form data and fail to parse it correctly, throwing a 400 Bad Request error. Similarly, browsers need it to know whether to render an image, display an HTML layout, or prompt a file download.
+
+### How to Use It
+Set it to the appropriate MIME type for your payload. Often, you will also append a `charset` parameter indicating the character encoding used.
+
+- **JSON API Payloads**:
+  `Content-Type: application/json; charset=utf-8`
+- **HTML Pages**:
+  `Content-Type: text/html; charset=utf-8`
+- **File Uploads** (Multipart Forms):
+  `Content-Type: multipart/form-data; boundary=something`
+
+## Example
+
+```http
+Content-Type: application/json; charset=utf-8
+```

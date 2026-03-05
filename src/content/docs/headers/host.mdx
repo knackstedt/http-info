@@ -1,0 +1,30 @@
+---
+title: "Host"
+description: "Indicates the domain name and port of the server the client intends to reach."
+---
+
+## General Summary
+
+Indicates the domain name and port of the server the client intends to reach.
+
+## Detailed Description
+
+The `Host` request HTTP header specifies the exact domain name and TCP port number the client is targeting. It is the only header that is strictly required by the HTTP/1.1 specification. Because modern web infrastructure heavily utilizes virtual hosting—where hundreds of websites share a single IP address—the `Host` header is the sole mechanism routers and web servers use to direct the traffic to the correct application.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+It is sent automatically on every single HTTP/1.1 request by clients and browsers. If manual requests are made (like over Telnet), it must be typed out.
+
+### Why to Use It
+Without the `Host` header, an Nginx reverse proxy routing traffic for `shop.com`, `blog.com`, and `api.com` all on the same server wouldn't know which internal service to forward the request to.
+
+### How to Use It
+Provide the domain and optional port.
+`Host: api.stripe.com:443`
+
+## Example
+
+```http
+Host: api.example.com
+```

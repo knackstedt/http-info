@@ -1,0 +1,30 @@
+---
+title: "Accept-Language"
+description: "Tells the server the user's preferred human languages for localized content."
+---
+
+## General Summary
+
+Tells the server the user's preferred human languages for localized content.
+
+## Detailed Description
+
+The `Accept-Language` request HTTP header indicates the natural languages and geographical locales that the user prefers. The server can use this hint via Content Negotiation to serve a localized version of a page (e.g. serving the French version of a website if the user's browser is set to French).
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+It is sent automatically by the browser based on the operating system's locale settings.
+
+### Why to Use It
+It provides a seamless, zero-click internationalization (i18n) experience for users. Instead of forcing users to find a flag icon to switch languages, the server automatically infers their preference on the first page load.
+
+### How to Use It
+It uses language tags and optional `q` (quality) weighting factors to indicate a prioritized list of preferences.
+`Accept-Language: fr-CH, fr;q=0.9, en;q=0.8` (Prefers Swiss French, then standard French, then English).
+
+## Example
+
+```http
+Accept-Language: en-US,en;q=0.9
+```

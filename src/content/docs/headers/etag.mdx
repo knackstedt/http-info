@@ -1,0 +1,30 @@
+---
+title: "ETag"
+description: "A unique identifier for a specific version of a resource to enable highly efficient cache validation."
+---
+
+## General Summary
+
+A unique identifier for a specific version of a resource to enable highly efficient cache validation.
+
+## Detailed Description
+
+The `ETag` (Entity Tag) response header provides an identifier for a specific version of a resource, usually represented as a hash of the content or a version number. It acts as a fingerprint. When a client makes subsequent requests for the same resource, it sends the `ETag` back to the server. If the fingerprint matches, the server knows the content hasn't changed.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+Include an `ETag` string on responses for static assets, heavy JSON payloads, or resources that are frequently polled but rarely updated.
+
+### Why to Use It
+It prevents the server from returning a massive payload that the client already has. Instead, the server compares the ETag, realizes nothing changed, and instantly returns a lightweight `304 Not Modified` status, saving bandwidth and processing time.
+
+### How to Use It
+Generate a hash of your payload string and send it surrounded by quotes.
+`ETag: "33a64df551425fcc55e4d42a148795d9f25f89d4"`
+
+## Example
+
+```http
+ETag: "686897696a7c876b7e"
+```

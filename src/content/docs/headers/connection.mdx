@@ -1,0 +1,30 @@
+---
+title: "Connection"
+description: "Controls whether the TCP network connection stays open after the current transaction finishes."
+---
+
+## General Summary
+
+Controls whether the TCP network connection stays open after the current transaction finishes.
+
+## Detailed Description
+
+The `Connection` general header controls whether the underlying network connection should be kept open after the current web transaction completes. In HTTP/1.1, connections are persistent (`keep-alive`) by default, meaning they stay open to route subsequent requests to the same server without the overhead of negotiating a new TCP handshake.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+You generally do not need to alter this header in modern HTTP/1.1 or HTTP/2 apps. However, it is explicitly used to close a connection or to signal protocol upgrades (like upgrading an HTTP connection to a WebSocket).
+
+### Why to Use It
+If a server is experiencing heavy traffic and connection exhaustion, it might dynamically send `Connection: close` to force clients to disconnect and free up sockets. Conversely, if a client wants to upgrade to WebSockets, it must send `Connection: Upgrade`.
+
+### How to Use It
+`Connection: keep-alive` (Default in HTTP/1.1)
+`Connection: close` (Forces the socket to close after the response)
+
+## Example
+
+```http
+Connection: keep-alive
+```

@@ -1,0 +1,32 @@
+---
+title: "RTT"
+description: "Application layer round trip time (RTT) in milliseconds, which includes the server processing time. This is part of the Network Information API."
+---
+
+## General Summary
+
+Application layer round trip time (RTT) in milliseconds, which includes the server processing time. This is part of the Network Information API.
+
+## Detailed Description
+
+The `RTT` HTTP header is a specialized field used to application layer round trip time (RTT) in milliseconds, which includes the server processing time. This is part of the Network Information API. It acts as a signaling mechanism between the client and the server to enforce policies, negotiate capabilities, or provide telemetry data during the transmission of requests and responses.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+This header is primarily utilized when the client or browser needs to declare its context or capabilities prior to establishing the transaction. Modern web applications rely on this to maintain state and context.
+
+### Why to Use It
+It facilitates seamless programmatic integration by ensuring both the client and server agree on the terms of the transaction, greatly improving performance, security, and rendering correctness without manual user intervention.
+
+### How to Use It
+Implement or parse this header within your application's network layer (such as an Express middleware or a Next.js edge function) by reading or attaching the key-value pair:
+```http
+RTT: <appropriate-value>
+```
+
+## Example
+
+```http
+RTT: <value>
+```

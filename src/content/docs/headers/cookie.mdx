@@ -1,0 +1,33 @@
+---
+title: "Cookie"
+description: "Transmits previously stored cookies back to the server attached to a user's session."
+---
+
+## General Summary
+
+Transmits previously stored cookies back to the server attached to a user's session.
+
+## Detailed Description
+
+The `Cookie` request HTTP header contains unexpired HTTP cookies that were previously sent to the client by the server using the `Set-Cookie` response header. Browsers automatically accumulate these cookies and append them to outgoing HTTP requests matching the domain and path attributes that the cookies were initially scoped to.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+As a backend developer, you read this header on incoming server requests to identify returning users, read session identifiers, or check tracking consent preferences. If you are making raw programmatic requests (e.g. from a CLI tool or Node shell), you manually construct and inject this header.
+
+### Why to Use It
+HTTP is a fundamentally stateless protocol. Cookies are the legacy (but still vastly widespread) mechanism for introducing state across multiple distinct requests, enabling persistent shopping carts, user logins, and targeted analytics.
+
+### How to Use It
+You generally do not set this header manually in browser-based Javascript (the browser handles it automatically). On the server, you parse the string into key-value pairs.
+
+*Example value syntax:*
+Multiple cookies are separated by semicolons and a single space.
+`Cookie: session_id=abc1234; user_theme=dark; consent=true`
+
+## Example
+
+```http
+Cookie: session_token=sk_live_83210492
+```

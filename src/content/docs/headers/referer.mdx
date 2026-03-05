@@ -1,0 +1,30 @@
+---
+title: "Referer"
+description: "Indicates the URL of the previous web page from which the current request originated."
+---
+
+## General Summary
+
+Indicates the URL of the previous web page from which the current request originated.
+
+## Detailed Description
+
+The `Referer` request header contains the absolute or partial address of the previous web page from which a link to the currently requested page was followed. The header is notoriously misspelled in the specification (missing an 'r'), which has been maintained for backward compatibility.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+Browsers automatically send this when users click links, submit forms, or load images embedded from other domains.
+
+### Why to Use It
+Servers use this header extensively for analytics (tracking where traffic is coming from), logging, and occasionally for optimizing caching. It can also be used for rudimentary security, like an image hosting service blocking hotlinking if the `Referer` isn't their own site.
+
+### How to Use It
+The value is simply the URL of the originating page.
+`Referer: https://developer.mozilla.org/en-US/docs/Web`
+
+## Example
+
+```http
+Referer: https://www.google.com/
+```

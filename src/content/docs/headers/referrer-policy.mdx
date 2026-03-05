@@ -1,0 +1,31 @@
+---
+title: "Referrer-Policy"
+description: "Governs how much tracking information is sent in the `Referer` header when navigating to other sites."
+---
+
+## General Summary
+
+Governs how much tracking information is sent in the `Referer` header when navigating to other sites.
+
+## Detailed Description
+
+The `Referrer-Policy` response header dictates how strictly the browser should populate the outgoing `Referer` header when a user navigates away from your site or fetches external resources. It acts as a privacy control to prevent sensitive data embedded in your URLs from leaking to third-party domains.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+Apply this header globally to your web application to protect user privacy and internal URL structures.
+
+### Why to Use It
+If a user is on `https://site.com/password-reset?token=123` and clicks an external link to `https://analytics.com`, the analytics company receives the full URL (including the secret token) in their `Referer` logs. A strong Referrer-Policy truncates or blocks this leak.
+
+### How to Use It
+Common privacy-preserving values:
+- `Referrer-Policy: no-referrer` (Never send the Referer header under any circumstances).
+- `Referrer-Policy: strict-origin-when-cross-origin` (Default in modern browsers. Sends the full URL for same-site links, but only sends the domain name for external links).
+
+## Example
+
+```http
+Referrer-Policy: strict-origin-when-cross-origin
+```

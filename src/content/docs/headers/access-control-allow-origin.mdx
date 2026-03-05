@@ -1,0 +1,38 @@
+---
+title: "Access-Control-Allow-Origin"
+description: "Specifies which domains are permitted to access the resources on the server via CORS."
+---
+
+## General Summary
+
+Specifies which domains are permitted to access the resources on the server via CORS.
+
+## Detailed Description
+
+The `Access-Control-Allow-Origin` response header is a fundamental component of Cross-Origin Resource Sharing (CORS). When a web browser attempts to fetch data from a different domain than the one it currently resides on (a cross-origin request), the browser checks this header on the server's response. If the requesting domain is not listed, the browser blocks the JavaScript code from accessing the response data to prevent malicious data theft.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+You must configure your server to return this header whenever your API is called from a frontend single-page application (SPA) hosted on a different domain or subdomain.
+
+### Why to Use It
+Browsers enforce the Same-Origin Policy by default, neutralizing cross-site request forgery attacks. This header allows legitimate cross-origin communication.
+
+### How to Use It
+You can return a specific origin, or a wildcard `*` to allow any site to access the API (common for public data APIs).
+
+- **Public API**:
+  `Access-Control-Allow-Origin: *`
+- **Private API / Partner Integration**:
+  `Access-Control-Allow-Origin: https://my-frontend.app.com`
+
+## Example
+
+```http
+Access-Control-Allow-Origin: https://example.com
+```
+
+:::tip
+Revisit the [CORS Reference Guide](/reference/cors) for an overview of how these headers interact.
+:::

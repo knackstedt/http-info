@@ -1,0 +1,31 @@
+---
+title: "Server"
+description: "Provides information about the underlying software suite running on the origin server."
+---
+
+## General Summary
+
+Provides information about the underlying software suite running on the origin server.
+
+## Detailed Description
+
+The `Server` response header contains information about the software used by the origin server to handle the request. This historically included the exact server software and version number (e.g. `Apache/2.4.1 (Unix)`).
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+Most web servers (Nginx, Apache, Express) automatically inject this header into outgoing responses by default.
+
+### Why to Use It
+While useful for high-level internet telemetry and debugging, emitting exact version numbers is generally considered an information disclosure vulnerability. Attackers routinely scan for specific, outdated `Server` headers to find unpatched software targets.
+
+### How to Use It
+Security best practices dictate that you should either completely remove this header from your proxy config, or overwrite it with a generic, non-descriptive string.
+
+*In securely configured environments:* `Server: webserver`
+
+## Example
+
+```http
+Server: nginx/1.24.0
+```

