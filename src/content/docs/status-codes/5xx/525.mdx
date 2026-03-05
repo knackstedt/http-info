@@ -1,0 +1,83 @@
+---
+title: "525 SSL Handshake Failed"
+description: "Cloudflare specific error. Cloudflare failed to securely negotiate TLS with the origin server."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Cloudflare specific error. Cloudflare failed to securely negotiate TLS with the origin server.
+
+## When and Why to Use It
+Cloudflare specific error. Cloudflare failed to securely negotiate TLS with the origin server.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('SSL Handshake Failed', 525);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('SSL Handshake Failed', 525);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(525).json({ error: 'SSL Handshake Failed' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('SSL Handshake Failed', 525);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 525;
+    ctx.body = { error: 'SSL Handshake Failed' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

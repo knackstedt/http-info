@@ -1,0 +1,83 @@
+---
+title: "507 Insufficient Storage"
+description: "WebDAV error indicating the server is out of disk space or storage quota."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+WebDAV error indicating the server is out of disk space or storage quota.
+
+## When and Why to Use It
+WebDAV specific. Use this when the server physically runs out of disk space while trying to save a client's uploaded file.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('Insufficient Storage', 507);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('Insufficient Storage', 507);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(507).json({ error: 'Insufficient Storage' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('Insufficient Storage', 507);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 507;
+    ctx.body = { error: 'Insufficient Storage' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

@@ -1,83 +1,88 @@
+/* Starlight Custom Theme */
 :root {
-    /* Raw Palette - Light */
-    --palette-light-primary: #D99058;   /* Toasted Crust */
-    --palette-light-secondary: #F2C078; /* Honey Butter */
-    --palette-light-accent: #F7F3F0;    /* Steam White */
-    --palette-light-text: #3D2B1F;      /* Espresso */
+    /* Amber Accent */
+    --sl-hue-accent: 40;
+    --sl-color-accent-low: hsl(var(--sl-hue-accent), 90%, 25%);
+    --sl-color-accent: hsl(var(--sl-hue-accent), 100%, 50%);
+    --sl-color-accent-high: hsl(var(--sl-hue-accent), 100%, 80%);
 
-    /* Raw Palette - Dark */
-    --palette-dark-primary: #FFB380;    /* Warm Filament */
-    --palette-dark-secondary: #7B5E7B;  /* Yeast Purple */
-    --palette-dark-accent: #D6D3D1;     /* Flour Dust */
-    --palette-dark-bg: #1A1614;         /* Oven Depth */
-    --palette-dark-card: #2A2421;       /* Proofing Drawer */
+    /* Dark Gray Backgrounds */
+    --sl-color-black: #121415;
+    --sl-color-gray-6: #1a1d1e;
+    --sl-color-gray-5: #2b3031;
+    --sl-color-gray-4: #4a5356;
+    --sl-color-gray-3: #758387;
+    --sl-color-gray-2: #a1afb3;
+    --sl-color-gray-1: #dbe3e5;
+    --sl-color-white: #f5f7f8;
 
-    /* Universal defaults (tokens) */
-    --shokupan-font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --sl-color-bg: var(--sl-color-black);
+    --sl-color-bg-nav: var(--sl-color-gray-6);
+    --sl-color-bg-sidebar: var(--sl-color-gray-6);
+
+    --sl-font: 'vend-sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --sl-font-mono: 'google-sans-code', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    font-family: var(--sl-font);
+
+
+    --sl-text-2xl: 1rem;
 }
 
-/* Light Mode (Default) */
-:root, :root[data-theme="light"] {
-    --bg-primary: var(--palette-light-accent);
-    --bg-secondary: #FFFFFF; /* High contrast card bg against accent */
-    --bg-card: #FFFFFF;
-    
-    --text-primary: var(--palette-light-text);
-    --text-secondary: rgba(61, 43, 31, 0.7); /* Derived from Espresso with opacity */
-    --text-muted: rgba(61, 43, 31, 0.5);
+:root[data-theme='light'] {
+    --sl-color-accent-low: hsl(var(--sl-hue-accent), 100%, 85%);
+    --sl-color-accent: hsl(var(--sl-hue-accent), 100%, 45%);
+    --sl-color-accent-high: hsl(var(--sl-hue-accent), 100%, 25%);
 
-    --primary: var(--palette-light-primary);
-    --secondary: var(--palette-light-secondary);
-    --accent: var(--palette-light-accent);
-    
-    --border-color: rgba(61, 43, 31, 0.1);
-    --card-border: rgba(61, 43, 31, 0.1);
+    --sl-color-black: #f5f7f8;
+    --sl-color-gray-6: #dbe3e5;
+    --sl-color-gray-5: #a1afb3;
+    --sl-color-gray-4: #758387;
+    --sl-color-gray-3: #4a5356;
+    --sl-color-gray-2: #2b3031;
+    --sl-color-gray-1: #1a1d1e;
+    --sl-color-white: #121415;
 
-    --link-color: var(--palette-light-primary);
-    --link-hover: var(--palette-light-secondary);
+    --sl-color-bg: var(--sl-color-white);
+    --sl-color-bg-nav: var(--sl-color-gray-1);
+    --sl-color-bg-sidebar: var(--sl-color-gray-1);
 }
 
-/* Dark Mode */
-@media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-        --bg-primary: var(--palette-dark-bg);
-        --bg-secondary: var(--palette-dark-card);
-        --bg-card: var(--palette-dark-card);
-        
-        /* Text in Dark mode */
-        --text-primary: #F0F0F0; /* Brighter than accent for contrast */
-        --text-secondary: var(--palette-dark-accent); /* "Secondary text" usage */
-        --text-muted: rgba(214, 211, 209, 0.5);
-
-        --primary: var(--palette-dark-primary);   /* Active links, CTAs */
-        --secondary: var(--palette-dark-secondary); /* Secondary buttons, decorators */
-        --accent: var(--palette-dark-accent);     /* Borders, icons */
-
-        --border-color: var(--palette-dark-accent);
-        --card-border: rgba(214, 211, 209, 0.2);
-
-        --link-color: var(--palette-dark-primary);
-        --link-hover: #FFCBA0; /* Lighter primary */
-    }
+/* Adjust headings to be much smaller and compact */
+h1 {
+    font-size: 1.3rem !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+    margin-top: 0.75rem !important;
+    margin-bottom: 0.5rem !important;
 }
 
-/* Explicit Dark Mode Override */
-:root[data-theme="dark"] {
-    --bg-primary: var(--palette-dark-bg);
-    --bg-secondary: var(--palette-dark-card);
-    --bg-card: var(--palette-dark-card);
-    
-    --text-primary: #F0F0F0;
-    --text-secondary: var(--palette-dark-accent);
-    --text-muted: rgba(214, 211, 209, 0.5);
+h2 {
+    font-size: 1.15rem !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    margin-top: 1rem !important;
+    margin-bottom: 0.5rem !important;
+}
 
-    --primary: var(--palette-dark-primary);
-    --secondary: var(--palette-dark-secondary);
-    --accent: var(--palette-dark-accent);
+h3 {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+    margin-top: 0.75rem !important;
+    margin-bottom: 0.25rem !important;
+}
 
-    --border-color: var(--palette-dark-accent);
-    --card-border: rgba(214, 211, 209, 0.2);
+.sl-markdown-content :not(h1, h2, h3, h4, h5, h6, .sl-heading-wrapper)+ :is(.sl-heading-wrapper) {
+    margin-top: .5em !important;
+}
 
-    --link-color: var(--palette-dark-primary);
-    --link-hover: #FFCBA0;
+
+/* Reduce padding on the top and bottom of the content blocks */
+.content-panel {
+    padding-block: 0.5rem !important;
+}
+
+/* Remove the large top margin specifically from the markdown container */
+.sl-markdown-content {
+    margin-top: 0 !important;
 }

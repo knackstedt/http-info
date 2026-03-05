@@ -1,0 +1,83 @@
+---
+title: "414 URI Too Long"
+description: "The URL query string is way too long for the server to process."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+The URL query string is way too long for the server to process.
+
+## When and Why to Use It
+Use this when the URL query string is absurdly long, which could be a sign of a bad client loop or a malicious attack trying to crash your router.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('URI Too Long', 414);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('URI Too Long', 414);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(414).json({ error: 'URI Too Long' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('URI Too Long', 414);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 414;
+    ctx.body = { error: 'URI Too Long' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

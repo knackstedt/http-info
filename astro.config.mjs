@@ -2,8 +2,6 @@ import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
 import { defineConfig } from 'astro/config';
 import starlightImageZoom from 'starlight-image-zoom';
-import starlightLlmsTxt from 'starlight-llms-txt';
-import starlightThemeFlexoki from 'starlight-theme-flexoki';
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,41 +9,42 @@ export default defineConfig({
     base: '/',
     integrations: [
         sitemap({
-            customPages: [
-                'https://http.shokupan.dev/llms.txt',
-                'https://http.shokupan.dev/llms-full.txt',
-                'https://http.shokupan.dev/llms-small.txt',
-            ],
             changefreq: 'weekly',
             priority: 0.7,
             lastmod: new Date()
         }),
         starlight({
-            components: {
-                SocialIcons: './src/components/SocialIcons.astro',
-            },
             plugins: [
                 starlightImageZoom({ showCaptions: true }),
-                starlightThemeFlexoki(),
-                starlightLlmsTxt(),
-                starlightTypeDoc({
-                    typeDoc: {
-                        interfacePropertiesFormat: 'htmlTable',
-                    },
-                    entryPoints: ['../src/index.ts'],
-                    tsconfig: '../tsconfig.json'
-                }),
             ],
-            title: 'Shokupan',
-            description: 'A low-lift modern web framework for Bun',
+            title: 'HTTP Info',
+            description: 'A comprehensive reference for HTTP verbs, status codes, and headers',
             social: [
-                { label: 'GitHub', href: 'https://github.com/knackstedt/shokupan', icon: 'github' },
+                { label: 'GitHub', href: 'https://github.com/knackstedt/http-info', icon: 'github' },
             ],
-            editLink: {
-                baseUrl: 'https://github.com/knackstedt/shokupan/edit/main/docs/',
-            },
             sidebar: [
-
+                {
+                    label: 'Verbs',
+                    autogenerate: { directory: 'verbs' }
+                },
+                {
+                    label: 'Status Codes',
+                    items: [
+                        { label: '1xx Informational', autogenerate: { directory: 'status-codes/1xx' } },
+                        { label: '2xx Success', autogenerate: { directory: 'status-codes/2xx' } },
+                        { label: '3xx Redirection', autogenerate: { directory: 'status-codes/3xx' } },
+                        { label: '4xx Client Error', autogenerate: { directory: 'status-codes/4xx' } },
+                        { label: '5xx Server Error', autogenerate: { directory: 'status-codes/5xx' } },
+                    ]
+                },
+                {
+                    label: 'Headers',
+                    autogenerate: { directory: 'headers' }
+                },
+                {
+                    label: 'Glossary',
+                    autogenerate: { directory: 'glossary' }
+                }
             ],
             customCss: [
                 './src/styles/custom.css',
@@ -55,11 +54,6 @@ export default defineConfig({
     vite: {
         resolve: {
             preserveSymlinks: true,
-        },
-        server: {
-            fs: {
-                allow: ['..'],
-            }
         }
     }
 });

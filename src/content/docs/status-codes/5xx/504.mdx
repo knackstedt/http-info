@@ -1,0 +1,142 @@
+---
+title: "504 Gateway Timeout"
+description: "The middleman (proxy) gave up waiting for the upstream server to respond."
+---
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+The middleman (proxy) gave up waiting for the upstream server to respond.
+
+## When and Why to Use It
+Use this on reverse proxies. If your API gateway forwards a request to a microservice, but that microservice takes 60 seconds to respond, the gateway should kill the request and return a 504.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const proxyReport = get('/report', async () => {
+    try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 10000); // 10s
+        
+        const res = await fetch('http://slow-service.internal/report', { 
+            signal: controller.signal 
+        });
+        clearTimeout(timeout);
+        return res.json();
+    } catch (err) {
+        if (err.name === 'AbortError') {
+            throw new HttpException('Upstream service took too long', 504);
+        }
+        throw new HttpException('Internal Error', 500);
+    }
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ProxyController {
+    @Get('/report')
+    async proxyReport() {
+        try {
+            const controller = new AbortController();
+            const id = setTimeout(() => controller.abort(), 10000);
+            
+            const res = await fetch('http://slow.internal', { signal: controller.signal });
+            clearTimeout(id);
+            return res.json();
+        } catch (err) {
+            if (err.name === 'AbortError') throw new HttpException('Gateway Timeout', 504);
+            throw new HttpException('Internal Error', 500);
+        }
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/report', async (req, res) => {
+    try {
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), 10000);
+        
+        const upRes = await fetch('http://slow.internal', { signal: controller.signal });
+        clearTimeout(id);
+        res.json(await upRes.json());
+    } catch (err) {
+        if (err.name === 'AbortError') {
+            return res.status(504).json({ error: 'Gateway Timeout' });
+        }
+        res.status(500).json({ error: 'Internal Error' });
+    }
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, GatewayTimeoutException } from '@nestjs/common';
+
+@Controller('report')
+export class ProxyController {
+  @Get()
+  async proxyReport() {
+    try {
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), 10000);
+        const res = await fetch('http://slow.internal', { signal: controller.signal });
+        clearTimeout(id);
+        return res.json();
+    } catch (err) {
+        if (err.name === 'AbortError') {
+            throw new GatewayTimeoutException('Upstream service took too long');
+        }
+        throw err;
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/report' && ctx.method === 'GET') {
+    try {
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), 10000);
+        const res = await fetch('http://slow.internal', { signal: controller.signal });
+        clearTimeout(id);
+        ctx.body = await res.json();
+    } catch (err) {
+        if (err.name === 'AbortError') {
+            ctx.status = 504;
+            ctx.body = { error: 'Gateway Timeout' };
+            return;
+        }
+        ctx.throw(500, 'Internal Error');
+    }
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

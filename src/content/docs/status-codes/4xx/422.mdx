@@ -1,0 +1,106 @@
+---
+title: "422 Unprocessable Content"
+description: "The request was perfectly formatted, but contained semantic errors. E.g. providing an email address that isn't valid, but sending it correctly."
+---
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+The request was perfectly formatted, but contained semantic errors. E.g. providing an email address that isn't valid, but sending it correctly.
+
+## When and Why to Use It
+Use this for validation errors. E.g., the JSON was perfectly valid, but the 'age' field was set to -50. Use 422 to say 'I understood it, but the data is semantically wrong'.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, post } from 'shokupan';
+
+export const updateProfile = post('/profile', (req) => {
+    if (req.body.password && req.body.password.length < 8) {
+        throw new HttpException('Password must be at least 8 characters', 422);
+    }
+    
+    // ... update profile
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Post, Body, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ProfileController {
+    @Post('/profile')
+    updateProfile(@Body() body: any) {
+        if (body.password && body.password.length < 8) {
+            throw new HttpException('Password must be at least 8 characters', 422);
+        }
+        
+        // ... update profile
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.post('/profile', (req, res) => {
+    if (req.body.password && req.body.password.length < 8) {
+        return res.status(422).json({ error: 'Password must be at least 8 characters' });
+    }
+    
+    // ... update profile
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Post, Body, UnprocessableEntityException } from '@nestjs/common';
+
+@Controller('profile')
+export class ProfileController {
+  @Post()
+  updateProfile(@Body() body: any) {
+    if (body.password && body.password.length < 8) {
+      throw new UnprocessableEntityException('Password must be at least 8 characters');
+    }
+    
+    // ... update profile
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/profile' && ctx.method === 'POST') {
+    const body = ctx.request.body;
+    
+    if (body && body.password && body.password.length < 8) {
+      ctx.status = 422;
+      ctx.body = { error: 'Password must be at least 8 characters' };
+      return;
+    }
+    
+    // ... update profile
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

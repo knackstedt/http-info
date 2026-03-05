@@ -1,0 +1,117 @@
+---
+title: "429 Too Many Requests"
+description: "You've hit the rate limit. Slow down and try again later."
+---
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+You've hit the rate limit. Slow down and try again later.
+
+## When and Why to Use It
+Use this for Rate Limiting. If a free-tier user is permitted 100 requests per minute and they send 101, block them with a 429.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const searchRecords = get('/search', async (req) => {
+    const rateLimit = await checkRateLimit(req.ip);
+    
+    if (rateLimit.exceeded) {
+        throw new HttpException('Too Many Requests. Please wait 60s.', 429);
+    }
+    
+    // ... perform search
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, Req, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class SearchController {
+    @Get('/search')
+    async searchRecords(@Req() req: any) {
+        const rateLimit = await checkRateLimit(req.ip);
+        
+        if (rateLimit.exceeded) {
+            throw new HttpException('Too Many Requests. Please wait 60s.', 429);
+        }
+        
+        // ... perform search
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/search', async (req, res) => {
+    const rateLimit = await checkRateLimit(req.ip);
+    
+    if (rateLimit.exceeded) {
+        res.set('Retry-After', '60');
+        return res.status(429).json({ error: 'Too Many Requests' });
+    }
+    
+    // ... perform search
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, Req, HttpException, HttpStatus } from '@nestjs/common';
+
+@Controller('search')
+export class SearchController {
+  @Get()
+  async searchRecords(@Req() req: any) {
+    // In Nest, you usually use ThrottlerGuard globally
+    const rateLimit = await checkRateLimit(req.ip);
+    
+    if (rateLimit.exceeded) {
+      throw new HttpException('Too Many Requests', HttpStatus.TOO_MANY_REQUESTS);
+    }
+    
+    // ... perform search
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/search' && ctx.method === 'GET') {
+    const rateLimit = await checkRateLimit(ctx.ip);
+    
+    if (rateLimit.exceeded) {
+      ctx.set('Retry-After', '60');
+      ctx.status = 429;
+      ctx.body = { error: 'Too Many Requests' };
+      return;
+    }
+    
+    // ... perform search
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

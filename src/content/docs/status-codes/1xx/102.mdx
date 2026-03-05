@@ -1,0 +1,85 @@
+---
+title: "102 Processing"
+description: "Used mainly in WebDAV. It tells the client 'I got your request and I'm working on it, don't time out just yet!'"
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Used mainly in WebDAV. It tells the client 'I got your request and I'm working on it, don't time out just yet!'
+
+## When and Why to Use It
+Rare outside of WebDAV. Use it when an operation will take a very long time, and you want to tell the client 'I am still working on it, please do not close the connection'.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpCode, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    return { message: 'Processing' };
+}).pipe(HttpCode(102));
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpCode } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    @HttpCode(102)
+    getResource() {
+        return { message: 'Processing' };
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(102).json({ message: 'Processing' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpCode } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  @HttpCode(102)
+  getResource() {
+    return { message: 'Processing' };
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 102;
+    ctx.body = { message: 'Processing' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

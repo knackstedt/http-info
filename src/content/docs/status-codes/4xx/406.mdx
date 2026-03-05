@@ -1,0 +1,83 @@
+---
+title: "406 Not Acceptable"
+description: "The client requested a specific content type (like XML), but the server can only provide another type (like JSON)."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+The client requested a specific content type (like XML), but the server can only provide another type (like JSON).
+
+## When and Why to Use It
+Use this if your API only speaks JSON, but the client sends an 'Accept: text/xml' header explicitly refusing to accept JSON.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('Not Acceptable', 406);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('Not Acceptable', 406);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(406).json({ error: 'Not Acceptable' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('Not Acceptable', 406);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 406;
+    ctx.body = { error: 'Not Acceptable' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

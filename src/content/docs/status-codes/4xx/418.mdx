@@ -1,0 +1,83 @@
+---
+title: "418 I'm a teapot"
+description: "An April Fool's joke from 1998 indicating the server is a teapot and cannot brew coffee."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+An April Fool's joke from 1998 indicating the server is a teapot and cannot brew coffee.
+
+## When and Why to Use It
+Do not use this unless you are building an easter egg. It's an April Fools' joke.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('I\'m a teapot', 418);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('I\'m a teapot', 418);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(418).json({ error: 'I\'m a teapot' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('I\'m a teapot', 418);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 418;
+    ctx.body = { error: 'I\'m a teapot' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

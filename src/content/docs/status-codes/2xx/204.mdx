@@ -1,0 +1,85 @@
+---
+title: "204 No Content"
+description: "Success, but there is absolutely nothing to send back in the response body. Common for successful DELETE operations."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Success, but there is absolutely nothing to send back in the response body. Common for successful DELETE operations.
+
+## When and Why to Use It
+Use this when a request succeeded, but there is literally no data to send back. The most common use case is a successful DELETE request. 'I deleted it, mission accomplished, nothing else to say.'
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpCode, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    return { message: 'No Content' };
+}).pipe(HttpCode(204));
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpCode } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    @HttpCode(204)
+    getResource() {
+        return { message: 'No Content' };
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(204).json({ message: 'No Content' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpCode } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  @HttpCode(204)
+  getResource() {
+    return { message: 'No Content' };
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 204;
+    ctx.body = { message: 'No Content' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

@@ -1,0 +1,83 @@
+---
+title: "506 Variant Also Negotiates"
+description: "A server configuration error resulting in an infinite loop while trying to negotiate the right content to return."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+A server configuration error resulting in an infinite loop while trying to negotiate the right content to return.
+
+## When and Why to Use It
+Use this if your server gets stuck in a recursive loop trying to negotiate which content structure (like language or encoding format) to respond with.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('Variant Also Negotiates', 506);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('Variant Also Negotiates', 506);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(506).json({ error: 'Variant Also Negotiates' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('Variant Also Negotiates', 506);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 506;
+    ctx.body = { error: 'Variant Also Negotiates' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

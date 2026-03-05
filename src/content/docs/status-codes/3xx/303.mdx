@@ -1,0 +1,85 @@
+---
+title: "303 See Other"
+description: "You submitted a POST request successfully, now please GET the result from this other URL. Prevents duplicate form submissions on refresh."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+You submitted a POST request successfully, now please GET the result from this other URL. Prevents duplicate form submissions on refresh.
+
+## When and Why to Use It
+Use this after a successful POST request (like submitting a form) to redirect the user to a success page. This stops the browser from showing the 'Confirm Form Resubmission' popup if the user hits the refresh button.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpCode, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    return { message: 'See Other' };
+}).pipe(HttpCode(303));
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpCode } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    @HttpCode(303)
+    getResource() {
+        return { message: 'See Other' };
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(303).json({ message: 'See Other' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpCode } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  @HttpCode(303)
+  getResource() {
+    return { message: 'See Other' };
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 303;
+    ctx.body = { message: 'See Other' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

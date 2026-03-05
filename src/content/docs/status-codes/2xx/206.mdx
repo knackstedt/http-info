@@ -1,0 +1,85 @@
+---
+title: "206 Partial Content"
+description: "Success, but here is only part of the data. Used for streaming video or resuming paused downloads."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Success, but here is only part of the data. Used for streaming video or resuming paused downloads.
+
+## When and Why to Use It
+Use this when serving large files (like streaming video). If the client says 'Give me bytes 1000 to 2000', you respond with 206 Partial Content and send exactly that chunk.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpCode, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    return { message: 'Partial Content' };
+}).pipe(HttpCode(206));
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpCode } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    @HttpCode(206)
+    getResource() {
+        return { message: 'Partial Content' };
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(206).json({ message: 'Partial Content' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpCode } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  @HttpCode(206)
+  getResource() {
+    return { message: 'Partial Content' };
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 206;
+    ctx.body = { message: 'Partial Content' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

@@ -1,0 +1,83 @@
+---
+title: "415 Unsupported Media Type"
+description: "You sent data in a format the server doesn't understand. E.g., sending XML to an endpoint that only speaks JSON."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+You sent data in a format the server doesn't understand. E.g., sending XML to an endpoint that only speaks JSON.
+
+## When and Why to Use It
+Use this if you expect a JSON body, but the client sends the data as raw text or XML.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('Unsupported Media Type', 415);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('Unsupported Media Type', 415);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(415).json({ error: 'Unsupported Media Type' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('Unsupported Media Type', 415);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 415;
+    ctx.body = { error: 'Unsupported Media Type' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

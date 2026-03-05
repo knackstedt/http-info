@@ -1,0 +1,114 @@
+---
+title: "500 Internal Server Error"
+description: "The classic server crash. The server threw an unhandled exception or encountered a condition it couldn't recover from."
+---
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+The classic server crash. The server threw an unhandled exception or encountered a condition it couldn't recover from.
+
+## When and Why to Use It
+Use this as a last-resort catch-all. If your code completely panics, throws an unhandled exception, or fails to connect to the database, catch it at the top level and return a 500.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getDashboard = get('/dashboard', async () => {
+    try {
+        const stats = await db.analytics.getHeavyQuery();
+        return stats;
+    } catch (err) {
+        console.error('Database query failed:', err);
+        throw new HttpException('Internal Server Error', 500);
+    }
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class DashboardController {
+    @Get('/dashboard')
+    async getDashboard() {
+        try {
+            const stats = await db.analytics.getHeavyQuery();
+            return stats;
+        } catch (err) {
+            console.error('Database query failed:', err);
+            throw new HttpException('Internal Server Error', 500);
+        }
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/dashboard', async (req, res) => {
+    try {
+        const stats = await db.analytics.getHeavyQuery();
+        res.json(stats);
+    } catch (err) {
+        console.error('Database query failed:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, InternalServerErrorException } from '@nestjs/common';
+
+@Controller('dashboard')
+export class DashboardController {
+  @Get()
+  async getDashboard() {
+    try {
+      const stats = await db.analytics.getHeavyQuery();
+      return stats;
+    } catch (err) {
+      console.error('Database query failed:', err);
+      // Nest has a unified Exception Filter, but you can throw explicitly
+      throw new InternalServerErrorException('Database query failed');
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/dashboard' && ctx.method === 'GET') {
+    try {
+      const stats = await db.analytics.getHeavyQuery();
+      ctx.body = stats;
+    } catch (err) {
+      console.error('Database query failed:', err);
+      ctx.status = 500;
+      ctx.body = { error: 'Internal Server Error' };
+    }
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

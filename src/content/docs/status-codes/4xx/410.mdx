@@ -1,0 +1,83 @@
+---
+title: "410 Gone"
+description: "Like 404, but permanent. The resource is gone and is never coming back. Search engines should drop it immediately."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Like 404, but permanent. The resource is gone and is never coming back. Search engines should drop it immediately.
+
+## When and Why to Use It
+Use this for APIs that have been permanently sunset and removed, or resources that were intentionally permanently deleted. It tells clients 'Stop asking for this, forever'.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('Gone', 410);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('Gone', 410);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(410).json({ error: 'Gone' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('Gone', 410);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 410;
+    ctx.body = { error: 'Gone' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

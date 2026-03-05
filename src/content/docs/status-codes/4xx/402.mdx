@@ -1,0 +1,83 @@
+---
+title: "402 Payment Required"
+description: "Rarely used, originally intended for digital micro-payments. Now used by some APIs (like Stripe) to indicate failed payments or exceeded quotas."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Rarely used, originally intended for digital micro-payments. Now used by some APIs (like Stripe) to indicate failed payments or exceeded quotas.
+
+## When and Why to Use It
+Mostly experimental, but you can use this if a user tries to use your API but they have exhausted their prepaid credits or their subscription payment failed.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('Payment Required', 402);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('Payment Required', 402);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(402).json({ error: 'Payment Required' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('Payment Required', 402);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 402;
+    ctx.body = { error: 'Payment Required' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

@@ -1,0 +1,83 @@
+---
+title: "523 Origin Is Unreachable"
+description: "Cloudflare specific error. Cloudflare could not contact the origin server due to routing issues."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Cloudflare specific error. Cloudflare could not contact the origin server due to routing issues.
+
+## When and Why to Use It
+Cloudflare specific error. Cloudflare could not contact the origin server due to routing issues.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('Origin Is Unreachable', 523);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('Origin Is Unreachable', 523);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(523).json({ error: 'Origin Is Unreachable' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('Origin Is Unreachable', 523);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 523;
+    ctx.body = { error: 'Origin Is Unreachable' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

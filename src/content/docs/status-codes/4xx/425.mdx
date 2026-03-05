@@ -1,0 +1,83 @@
+---
+title: "425 Too Early"
+description: "The server refuses to process the request because it might be replayed maliciously before the connection is fully secured."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+The server refuses to process the request because it might be replayed maliciously before the connection is fully secured.
+
+## When and Why to Use It
+Highly advanced. Use this to reject early data in a TLS handshake if you suspect a replay attack.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('Too Early', 425);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('Too Early', 425);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(425).json({ error: 'Too Early' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('Too Early', 425);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 425;
+    ctx.body = { error: 'Too Early' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

@@ -1,0 +1,109 @@
+---
+title: "503 Service Unavailable"
+description: "The server is currently unable to handle the request due to temporary overloading or maintenance. Try again later."
+---
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+The server is currently unable to handle the request due to temporary overloading or maintenance. Try again later.
+
+## When and Why to Use It
+Use this when you are intentionally taking the service offline for patching. Tell load balancers you are under maintenance so they can redirect traffic.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const checkout = get('/checkout', () => {
+    // Check a global or env flag
+    if (process.env.MAINTENANCE_MODE === 'true') {
+        throw new HttpException('Store is closed for maintenance', 503);
+    }
+    
+    // ... proceed with checkout
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class StoreController {
+    @Get('/checkout')
+    checkout() {
+        if (process.env.MAINTENANCE_MODE === 'true') {
+            throw new HttpException('Store is closed for maintenance', 503);
+        }
+        
+        // ... proceed with checkout
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+// You can apply this as global middleware!
+app.use((req, res, next) => {
+    if (process.env.MAINTENANCE_MODE === 'true') {
+        res.set('Retry-After', '3600'); // 1 hour
+        return res.status(503).json({ error: 'Maintenance Mode' });
+    }
+    next();
+});
+
+app.get('/checkout', (req, res) => {
+    // ... proceed with checkout
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, ServiceUnavailableException } from '@nestjs/common';
+
+@Controller('store')
+export class StoreController {
+  @Get('checkout')
+  checkout() {
+    if (process.env.MAINTENANCE_MODE === 'true') {
+      throw new ServiceUnavailableException('Store is closed for maintenance');
+    }
+    
+    // ... proceed with checkout
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+// Global middleware
+app.use(async (ctx, next) => {
+  if (process.env.MAINTENANCE_MODE === 'true') {
+    ctx.set('Retry-After', '3600');
+    ctx.status = 503;
+    ctx.body = { error: 'Maintenance Mode' };
+    return;
+  }
+  await next();
+});
+```
+
+  </TabItem>
+</Tabs>

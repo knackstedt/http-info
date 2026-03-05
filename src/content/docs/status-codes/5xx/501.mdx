@@ -1,0 +1,88 @@
+---
+title: "501 Not Implemented"
+description: "The server does not know how to handle the request method. It's either a very old server or a brand new API feature coming soon."
+---
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+The server does not know how to handle the request method. It's either a very old server or a brand new API feature coming soon.
+
+## When and Why to Use It
+Use this if you are building out an API, and someone tries to hit an endpoint you haven't written the code for yet.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, post } from 'shokupan';
+
+export const importData = post('/import', () => {
+    // We've defined the route, but haven't written the CSV parser yet
+    throw new HttpException('CSV Import coming in v2.0', 501);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Post, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ImportController {
+    @Post('/import')
+    importData() {
+        // We've defined the route, but haven't written the CSV parser yet
+        throw new HttpException('CSV Import coming in v2.0', 501);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.post('/import', (req, res) => {
+    // Endpoint defined, but logic missing
+    res.status(501).json({ error: 'CSV Import coming in v2.0' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Post, NotImplementedException } from '@nestjs/common';
+
+@Controller('import')
+export class ImportController {
+  @Post()
+  importData() {
+    // Endpoint defined, but logic missing
+    throw new NotImplementedException('CSV Import coming in v2.0');
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/import' && ctx.method === 'POST') {
+    // Endpoint defined, but logic missing
+    ctx.status = 501;
+    ctx.body = { error: 'CSV Import coming in v2.0' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

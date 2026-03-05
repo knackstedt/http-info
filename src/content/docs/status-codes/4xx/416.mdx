@@ -1,0 +1,83 @@
+---
+title: "416 Range Not Satisfiable"
+description: "You asked for a specific chunk of a file (like byte 100-200), but the file is only 50 bytes long."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+You asked for a specific chunk of a file (like byte 100-200), but the file is only 50 bytes long.
+
+## When and Why to Use It
+Use this when a client tries to resume a download starting at byte 1000, but your file is only 500 bytes long.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('Range Not Satisfiable', 416);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('Range Not Satisfiable', 416);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(416).json({ error: 'Range Not Satisfiable' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('Range Not Satisfiable', 416);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 416;
+    ctx.body = { error: 'Range Not Satisfiable' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

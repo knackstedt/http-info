@@ -1,0 +1,83 @@
+---
+title: "417 Expectation Failed"
+description: "The server cannot meet the requirements specified in the client's 'Expect' header."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+The server cannot meet the requirements specified in the client's 'Expect' header.
+
+## When and Why to Use It
+Use this when you reject a client's 100-Continue expectation because you don't support it or can't fulfill it.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('Expectation Failed', 417);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('Expectation Failed', 417);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(417).json({ error: 'Expectation Failed' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('Expectation Failed', 417);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 417;
+    ctx.body = { error: 'Expectation Failed' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

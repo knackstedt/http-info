@@ -1,0 +1,105 @@
+---
+title: "401 Unauthorized"
+description: "You must log in to access this resource. It actually means 'Unauthenticated'."
+---
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+You must log in to access this resource. It actually means 'Unauthenticated'.
+
+## When and Why to Use It
+Use this when the user tries to access a private endpoint, but they haven't logged in, or their session token is expired.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getProfile = get('/profile', (req) => {
+    const token = req.headers.authorization;
+    if (!token) {
+        throw new HttpException('Missing auth token', 401);
+    }
+    
+    // ... fetch profile safely
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, Req, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ProfileController {
+    @Get('/profile')
+    getProfile(@Req() req: any) {
+        if (!req.headers.authorization) {
+            throw new HttpException('Missing auth token', 401);
+        }
+        
+        // ... fetch profile safely
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/profile', (req, res) => {
+    if (!req.headers.authorization) {
+        return res.status(401).json({ error: 'Missing auth token' });
+    }
+    
+    // ... fetch profile safely
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, UnauthorizedException, Headers } from '@nestjs/common';
+
+@Controller('profile')
+export class ProfileController {
+  @Get()
+  getProfile(@Headers('authorization') authHeader: string) {
+    if (!authHeader) {
+      throw new UnauthorizedException('Missing auth token');
+    }
+    
+    // ... fetch profile safely
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/profile' && ctx.method === 'GET') {
+    if (!ctx.headers.authorization) {
+      ctx.status = 401;
+      ctx.body = { error: 'Missing auth token' };
+      return;
+    }
+    
+    // ... fetch profile safely
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

@@ -1,0 +1,115 @@
+---
+title: "404 Not Found"
+description: "The classic dead link. The server cannot find the requested resource."
+---
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+The classic dead link. The server cannot find the requested resource.
+
+## When and Why to Use It
+Use this when the requested URL simply doesn't exist, or if a user requests a specific ID that isn't in your database (e.g. GET /users/99999).
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getUser = get('/users/:id', async (req) => {
+    const user = await db.users.findById(req.params.id);
+    
+    if (!user) {
+        throw new HttpException('User not found in database', 404);
+    }
+    
+    return user;
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, Param, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class UserController {
+    @Get('/users/:id')
+    async getUser(@Param('id') id: string) {
+        const user = await db.users.findById(id);
+        
+        if (!user) {
+            throw new HttpException('User not found in database', 404);
+        }
+        
+        return user;
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/users/:id', async (req, res) => {
+    const user = await db.users.findById(req.params.id);
+    
+    if (!user) {
+        return res.status(404).json({ error: 'User not found in database' });
+    }
+    
+    res.json(user);
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, Param, NotFoundException } from '@nestjs/common';
+
+@Controller('users')
+export class UserController {
+  @Get(':id')
+  async getUser(@Param('id') id: string) {
+    const user = await db.users.findById(id);
+    
+    if (!user) {
+      throw new NotFoundException('User not found in database');
+    }
+    
+    return user;
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path.startsWith('/users/') && ctx.method === 'GET') {
+    const id = ctx.path.split('/')[2];
+    const user = await db.users.findById(id);
+    
+    if (!user) {
+      ctx.status = 404;
+      ctx.body = { error: 'User not found in database' };
+      return;
+    }
+    
+    ctx.body = user;
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

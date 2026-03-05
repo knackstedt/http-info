@@ -1,14 +1,43 @@
 ---
-title: HTTP
-description: Hyper Text Transfer Protocol
+title: HTTP Info
+description: A comprehensive and modern reference for HTTP verbs, status codes, and headers.
 template: splash
 hero:
-  tagline: The protocol that powers the web.
-  image:
-    file: ../../assets/http-info.png
+  tagline: The definitive guide to HTTP, built for Bun, Node, Deno, and the Browser.
   actions:
+    - text: Get Started
+      link: /verbs/get/
+      icon: right-arrow
+      variant: primary
     - text: View on GitHub
       link: https://github.com/knackstedt/http-info
       icon: external
-      variant: minimal
 ---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## What is HTTP?
+
+The Hypertext Transfer Protocol (HTTP) is the foundation of data communication for the World Wide Web. It functions as a request-response protocol in the client-server computing model. Whether you're building a simple website or a complex distributed API, understanding HTTP is critical to building reliable, secure, and fast applications.
+
+This documentation serves as a comprehensive, developer-focused reference for modern HTTP. Unlike dry RFCs or sparse tutorials, we prioritize **practical usage contexts, common caveats, and detailed environment-specific implementations** (like Bun, Node, Deno, and Browser fetch APIs).
+
+## Explore HTTP
+
+<CardGrid stagger>
+    <Card title="HTTP Verbs" icon="rocket">
+        Understand all RESTful methods like `GET`, `POST`, `PUT`, `DELETE` and more. 
+        [Browse Verbs](/verbs/)
+    </Card>
+    <Card title="Status Codes" icon="information">
+        A complete reference for 1xx through 5xx response codes, grouped by category.
+        [Browse Status Codes](/status-codes/)
+    </Card>
+    <Card title="Headers" icon="setting">
+        Comprehensive guide to HTTP request and response headers.
+        [Browse Headers](/headers/)
+    </Card>
+    <Card title="Built for Modern JS" icon="bun">
+        Includes specific examples and caveats for Bun, Node.js, and Deno environments, as well as Browser interactions.
+    </Card>
+</CardGrid>

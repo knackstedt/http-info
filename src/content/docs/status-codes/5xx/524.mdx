@@ -1,0 +1,83 @@
+---
+title: "524 A Timeout Occurred"
+description: "Cloudflare specific error. A connection was established, but the origin server took too long to send a response."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Cloudflare specific error. A connection was established, but the origin server took too long to send a response.
+
+## When and Why to Use It
+Cloudflare specific error. A connection was established, but the origin server took too long to send a response.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('A Timeout Occurred', 524);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('A Timeout Occurred', 524);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(524).json({ error: 'A Timeout Occurred' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('A Timeout Occurred', 524);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 524;
+    ctx.body = { error: 'A Timeout Occurred' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

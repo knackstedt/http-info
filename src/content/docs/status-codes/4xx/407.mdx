@@ -1,0 +1,83 @@
+---
+title: "407 Proxy Authentication Required"
+description: "Similar to 401, but you need to authenticate with the proxy server before you can access the actual server."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Similar to 401, but you need to authenticate with the proxy server before you can access the actual server.
+
+## When and Why to Use It
+Proxy servers use this when the client needs to explicitly log into the proxy server itself before going out to the broader internet.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('Proxy Authentication Required', 407);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('Proxy Authentication Required', 407);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(407).json({ error: 'Proxy Authentication Required' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('Proxy Authentication Required', 407);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 407;
+    ctx.body = { error: 'Proxy Authentication Required' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

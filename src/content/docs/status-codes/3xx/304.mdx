@@ -1,0 +1,85 @@
+---
+title: "304 Not Modified"
+description: "You already have the latest version of this file in your browser cache. I'm not going to send it again."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+You already have the latest version of this file in your browser cache. I'm not going to send it again.
+
+## When and Why to Use It
+Use this for massive performance gains. If the client asks 'Has this image changed since yesterday?' and it hasn't, respond with 304 instead of sending the heavy image again.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpCode, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    return { message: 'Not Modified' };
+}).pipe(HttpCode(304));
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpCode } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    @HttpCode(304)
+    getResource() {
+        return { message: 'Not Modified' };
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(304).json({ message: 'Not Modified' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpCode } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  @HttpCode(304)
+  getResource() {
+    return { message: 'Not Modified' };
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 304;
+    ctx.body = { message: 'Not Modified' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

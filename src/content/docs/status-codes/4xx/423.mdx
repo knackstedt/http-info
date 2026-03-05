@@ -1,0 +1,83 @@
+---
+title: "423 Locked"
+description: "WebDAV error indicating the resource you are trying to edit is currently locked by someone else."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+WebDAV error indicating the resource you are trying to edit is currently locked by someone else.
+
+## When and Why to Use It
+WebDAV specific. Use this if someone tries to edit a document that is currently locked by another collaborator.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('Locked', 423);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('Locked', 423);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(423).json({ error: 'Locked' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('Locked', 423);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 423;
+    ctx.body = { error: 'Locked' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

@@ -1,0 +1,83 @@
+---
+title: "428 Precondition Required"
+description: "The server requires conditional headers to prevent 'lost updates' where two people edit a file at the same time."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+The server requires conditional headers to prevent 'lost updates' where two people edit a file at the same time.
+
+## When and Why to Use It
+Use this to enforce safe collaborative editing. If a client tries to PUT updates to a shared document without specifying which exact version they are modifying, throw a 428 to force them to use safe conditional headers.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('Precondition Required', 428);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('Precondition Required', 428);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(428).json({ error: 'Precondition Required' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('Precondition Required', 428);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 428;
+    ctx.body = { error: 'Precondition Required' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

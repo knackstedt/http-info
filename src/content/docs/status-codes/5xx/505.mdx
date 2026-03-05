@@ -1,0 +1,83 @@
+---
+title: "505 HTTP Version Not Supported"
+description: "The server does not support the HTTP protocol version you are trying to use."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+The server does not support the HTTP protocol version you are trying to use.
+
+## When and Why to Use It
+Extremely rare. Throw this if your server strictly requires HTTP/2 or HTTP/3, and a client tries to connect with HTTP/1.0.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('HTTP Version Not Supported', 505);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('HTTP Version Not Supported', 505);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(505).json({ error: 'HTTP Version Not Supported' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('HTTP Version Not Supported', 505);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 505;
+    ctx.body = { error: 'HTTP Version Not Supported' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

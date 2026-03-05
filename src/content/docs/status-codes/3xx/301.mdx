@@ -1,0 +1,85 @@
+---
+title: "301 Moved Permanently"
+description: "This URL is permanently gone. Here is the new URL. Browsers and search engines will update their links automatically."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+This URL is permanently gone. Here is the new URL. Browsers and search engines will update their links automatically.
+
+## When and Why to Use It
+Use this when you have permanently changed the URL of a page. This tells Google and other search engines 'Forget the old URL, rank the new one instead'.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpCode, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    return { message: 'Moved Permanently' };
+}).pipe(HttpCode(301));
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpCode } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    @HttpCode(301)
+    getResource() {
+        return { message: 'Moved Permanently' };
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(301).json({ message: 'Moved Permanently' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpCode } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  @HttpCode(301)
+  getResource() {
+    return { message: 'Moved Permanently' };
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 301;
+    ctx.body = { message: 'Moved Permanently' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

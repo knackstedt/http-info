@@ -1,0 +1,85 @@
+---
+title: "203 Non-Authoritative Information"
+description: "The request was successful, but the information coming back was modified by a proxy somewhere along the way, not the original server."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+The request was successful, but the information coming back was modified by a proxy somewhere along the way, not the original server.
+
+## When and Why to Use It
+Very rarely used by standard application servers. A proxy server might use this if it modified the 200 OK response coming from your backend before sending it to the client.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpCode, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    return { message: 'Non-Authoritative Information' };
+}).pipe(HttpCode(203));
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpCode } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    @HttpCode(203)
+    getResource() {
+        return { message: 'Non-Authoritative Information' };
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(203).json({ message: 'Non-Authoritative Information' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpCode } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  @HttpCode(203)
+  getResource() {
+    return { message: 'Non-Authoritative Information' };
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 203;
+    ctx.body = { message: 'Non-Authoritative Information' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

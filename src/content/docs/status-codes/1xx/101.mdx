@@ -1,0 +1,85 @@
+---
+title: "101 Switching Protocols"
+description: "The server agrees to switch to a different protocol, like upgrading a standard HTTP connection to a continuous WebSocket connection."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+The server agrees to switch to a different protocol, like upgrading a standard HTTP connection to a continuous WebSocket connection.
+
+## When and Why to Use It
+Use this when a client asks to open a WebSocket connection. Your server responds with 101 to confirm 'Yes, we are no longer speaking standard HTTP, we are now using WebSockets'.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpCode, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    return { message: 'Switching Protocols' };
+}).pipe(HttpCode(101));
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpCode } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    @HttpCode(101)
+    getResource() {
+        return { message: 'Switching Protocols' };
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(101).json({ message: 'Switching Protocols' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpCode } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  @HttpCode(101)
+  getResource() {
+    return { message: 'Switching Protocols' };
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 101;
+    ctx.body = { message: 'Switching Protocols' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

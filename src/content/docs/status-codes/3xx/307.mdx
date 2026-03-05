@@ -1,0 +1,85 @@
+---
+title: "307 Temporary Redirect"
+description: "Like 302, but strictly forces the client to use the exact same HTTP method (e.g., POST) when following the redirect."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Like 302, but strictly forces the client to use the exact same HTTP method (e.g., POST) when following the redirect.
+
+## When and Why to Use It
+Use this instead of 302 when you want to guarantee the client will use the EXACT same HTTP method after redirecting. If they POSTed to the old URL, they must POST to the new URL.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpCode, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    return { message: 'Temporary Redirect' };
+}).pipe(HttpCode(307));
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpCode } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    @HttpCode(307)
+    getResource() {
+        return { message: 'Temporary Redirect' };
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(307).json({ message: 'Temporary Redirect' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpCode } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  @HttpCode(307)
+  getResource() {
+    return { message: 'Temporary Redirect' };
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 307;
+    ctx.body = { message: 'Temporary Redirect' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

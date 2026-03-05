@@ -1,0 +1,83 @@
+---
+title: "511 Network Authentication Required"
+description: "You need to log in to the network to get internet access. Often seen on public Wi-Fi captive portals (like at airports or coffee shops)."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+You need to log in to the network to get internet access. Often seen on public Wi-Fi captive portals (like at airports or coffee shops).
+
+## When and Why to Use It
+Use this if you are building portal software for a public WiFi hotspot (like a coffee shop) and need to redirect a user to a Terms of Service agreement page before they can use the internet.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('Network Authentication Required', 511);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('Network Authentication Required', 511);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(511).json({ error: 'Network Authentication Required' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('Network Authentication Required', 511);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 511;
+    ctx.body = { error: 'Network Authentication Required' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

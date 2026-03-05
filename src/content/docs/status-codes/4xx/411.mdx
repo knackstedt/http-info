@@ -1,0 +1,83 @@
+---
+title: "411 Length Required"
+description: "The server refuses to accept the request without a defined Content-Length header."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+The server refuses to accept the request without a defined Content-Length header.
+
+## When and Why to Use It
+Use this if your server strictly requires a Content-Length header to allocate memory, and the client failed to provide one.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('Length Required', 411);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('Length Required', 411);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(411).json({ error: 'Length Required' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('Length Required', 411);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 411;
+    ctx.body = { error: 'Length Required' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

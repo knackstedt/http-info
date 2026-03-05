@@ -1,0 +1,83 @@
+---
+title: "412 Precondition Failed"
+description: "The client set special conditions in its headers (like 'only update if the file hasn't changed'), and the condition wasn't met."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+The client set special conditions in its headers (like 'only update if the file hasn't changed'), and the condition wasn't met.
+
+## When and Why to Use It
+Use this when a client sends an 'If-Match' header (saying 'Only update this file if it hasn't been edited since yesterday'), but someone else already edited it today.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('Precondition Failed', 412);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('Precondition Failed', 412);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(412).json({ error: 'Precondition Failed' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('Precondition Failed', 412);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 412;
+    ctx.body = { error: 'Precondition Failed' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

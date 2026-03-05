@@ -1,0 +1,85 @@
+---
+title: "202 Accepted"
+description: "We got your request and accepted it, but we haven't finished processing it yet. Often used for long-running background tasks."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+We got your request and accepted it, but we haven't finished processing it yet. Often used for long-running background tasks.
+
+## When and Why to Use It
+Use this when a user submits a job that takes a long time (like 'generate a massive PDF report'). You return 202 to say 'Got it, I put it in the background queue', rather than making them wait for the job to finish.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpCode, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    return { message: 'Accepted' };
+}).pipe(HttpCode(202));
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpCode } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    @HttpCode(202)
+    getResource() {
+        return { message: 'Accepted' };
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(202).json({ message: 'Accepted' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpCode } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  @HttpCode(202)
+  getResource() {
+    return { message: 'Accepted' };
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 202;
+    ctx.body = { message: 'Accepted' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

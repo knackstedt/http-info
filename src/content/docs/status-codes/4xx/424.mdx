@@ -1,0 +1,83 @@
+---
+title: "424 Failed Dependency"
+description: "WebDAV error where a request failed because a previous dependent request also failed."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+WebDAV error where a request failed because a previous dependent request also failed.
+
+## When and Why to Use It
+WebDAV specific. Use this when a bulk request fails because an earlier step in the chain failed.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    throw new HttpException('Failed Dependency', 424);
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    getResource() {
+        throw new HttpException('Failed Dependency', 424);
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(424).json({ error: 'Failed Dependency' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpException } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  getResource() {
+    throw new HttpException('Failed Dependency', 424);
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 424;
+    ctx.body = { error: 'Failed Dependency' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

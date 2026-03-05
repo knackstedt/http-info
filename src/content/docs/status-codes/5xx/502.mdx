@@ -1,0 +1,113 @@
+---
+title: "502 Bad Gateway"
+description: "The server acting as a middleman (proxy) received an invalid response from the upstream server it was trying to reach."
+---
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+The server acting as a middleman (proxy) received an invalid response from the upstream server it was trying to reach.
+
+## When and Why to Use It
+Use this proxying requests. If your Nginx server tries to talk to your Node.js app, but the Node app returns an invalid HTTP response, Nginx will return a 502 to the user.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, get } from 'shokupan';
+
+export const proxyWeather = get('/weather', async () => {
+    const response = await fetch('http://upstream-weather-api.internal');
+    
+    if (!response.ok) {
+        throw new HttpException('Upstream returned invalid response', 502);
+    }
+    
+    return response.json();
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class ProxyController {
+    @Get('/weather')
+    async proxyWeather() {
+        const response = await fetch('http://upstream-weather-api.internal');
+        
+        if (!response.ok) {
+            throw new HttpException('Upstream returned invalid response', 502);
+        }
+        
+        return response.json();
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/weather', async (req, res) => {
+    try {
+        const response = await fetch('http://upstream-weather-api.internal');
+        if (!response.ok) throw new Error('Bad upstream');
+        res.json(await response.json());
+    } catch (err) {
+        res.status(502).json({ error: 'Bad Gateway - Upstream failed' });
+    }
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, BadGatewayException } from '@nestjs/common';
+
+@Controller('weather')
+export class ProxyController {
+  @Get()
+  async proxyWeather() {
+    try {
+      const response = await fetch('http://upstream-weather-api.internal');
+      if (!response.ok) throw new Error('Bad upstream');
+      return await response.json();
+    } catch (err) {
+      throw new BadGatewayException('Upstream returned invalid response');
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/weather' && ctx.method === 'GET') {
+    try {
+      const response = await fetch('http://upstream-weather-api.internal');
+      if (!response.ok) throw new Error('Bad upstream');
+      ctx.body = await response.json();
+    } catch (err) {
+      ctx.status = 502;
+      ctx.body = { error: 'Bad Gateway - Upstream failed' };
+    }
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

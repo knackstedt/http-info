@@ -1,0 +1,106 @@
+---
+title: "403 Forbidden"
+description: "You are logged in, but you don't have permission to access this specific resource or perform this action."
+---
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+You are logged in, but you don't have permission to access this specific resource or perform this action.
+
+## When and Why to Use It
+Use this when the user IS logged in, but they are trying to do something they have no business doing. Like a normal user trying to access the admin dashboard, or trying to edit someone else's profile.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, del } from 'shokupan';
+
+export const deleteUser = del('/users/:id', (req) => {
+    // Assuming auth checked earlier, yielding req.user
+    if (req.user.role !== 'admin') {
+        throw new HttpException('Admins only', 403);
+    }
+    
+    // ... delete user securely
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Delete, Req, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class AdminController {
+    @Delete('/users/:id')
+    deleteUser(@Req() req: any) {
+        if (req.user.role !== 'admin') {
+            throw new HttpException('Admins only', 403);
+        }
+        
+        // ... delete user securely
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.delete('/users/:id', (req, res) => {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Admins only' });
+    }
+    
+    // ... delete user securely
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Delete, Req, ForbiddenException } from '@nestjs/common';
+
+@Controller('users')
+export class AdminController {
+  @Delete(':id')
+  deleteUser(@Req() req: any) {
+    // In Nest you usually use Role Guards!
+    if (req.user.role !== 'admin') {
+      throw new ForbiddenException('Admins only');
+    }
+    
+    // ... delete user securely
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path.startsWith('/users/') && ctx.method === 'DELETE') {
+    if (ctx.state.user.role !== 'admin') {
+      ctx.status = 403;
+      ctx.body = { error: 'Admins only' };
+      return;
+    }
+    
+    // ... delete user securely
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

@@ -1,0 +1,85 @@
+---
+title: "207 Multi-Status"
+description: "Returns an XML document with multiple different status codes for multiple operations performed at once (WebDAV)."
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Returns an XML document with multiple different status codes for multiple operations performed at once (WebDAV).
+
+## When and Why to Use It
+Primarily used in WebDAV. Use it when you are performing bulk operations and some succeeded while others failed. You return an XML body detailing the status of every individual operation.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpCode, get } from 'shokupan';
+
+export const getResource = get('/resource', () => {
+    return { message: 'Multi-Status' };
+}).pipe(HttpCode(207));
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Get, HttpCode } from 'shokupan';
+
+@Controller('/api')
+export class ExampleController {
+    @Get('/resource')
+    @HttpCode(207)
+    getResource() {
+        return { message: 'Multi-Status' };
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.get('/resource', (req, res) => {
+    res.status(207).json({ message: 'Multi-Status' });
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Get, HttpCode } from '@nestjs/common';
+
+@Controller('api')
+export class ExampleController {
+  @Get('resource')
+  @HttpCode(207)
+  getResource() {
+    return { message: 'Multi-Status' };
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+app.use(async ctx => {
+  if (ctx.path === '/resource' && ctx.method === 'GET') {
+    ctx.status = 207;
+    ctx.body = { message: 'Multi-Status' };
+  }
+});
+```
+
+  </TabItem>
+</Tabs>

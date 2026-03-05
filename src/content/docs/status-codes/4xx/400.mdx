@@ -1,0 +1,111 @@
+---
+title: "400 Bad Request"
+description: "The server couldn't understand your request because the syntax is bad, the data is malformed, or it's missing required fields."
+---
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+The server couldn't understand your request because the syntax is bad, the data is malformed, or it's missing required fields.
+
+## When and Why to Use It
+Use this when the client sends you garbage. E.g., they sent invalid JSON, they missed a required field, or their search query was formatted illegally. Do not use this for server crashes.
+
+### Usage Examples
+
+<Tabs>
+  <TabItem label="Shokupan (Functional)">
+
+```typescript
+import { HttpException, post } from 'shokupan';
+
+export const createUser = post('/users', (req) => {
+    // Basic input validation
+    if (!req.body || !req.body.email) {
+        throw new HttpException('Missing required field: email', 400);
+    }
+    
+    // ... create user
+});
+```
+
+  </TabItem>
+  <TabItem label="Shokupan (Controller)">
+
+```typescript
+import { Controller, Post, Body, HttpException } from 'shokupan';
+
+@Controller('/api')
+export class UserController {
+    @Post('/users')
+    createUser(@Body() body: any) {
+        // Validation check
+        if (!body.email) {
+            throw new HttpException('Missing required field: email', 400);
+        }
+        
+        // ... create user
+    }
+}
+```
+
+  </TabItem>
+  <TabItem label="Express">
+
+```typescript
+import express from 'express';
+const app = express();
+
+app.post('/users', (req, res) => {
+    // Validate request body
+    if (!req.body?.email) {
+        return res.status(400).json({ error: 'Missing required field: email' });
+    }
+    
+    // ... create user
+});
+```
+
+  </TabItem>
+  <TabItem label="Nest">
+
+```typescript
+import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
+
+@Controller('users')
+export class UserController {
+  @Post()
+  createUser(@Body() body: any) {
+    // Usually Nest uses DTOs and ValidationPipes for this!
+    if (!body.email) {
+      throw new BadRequestException('Missing required field: email');
+    }
+    
+    // ... create user
+  }
+}
+```
+
+  </TabItem>
+  <TabItem label="Koa">
+
+```typescript
+import Koa from 'koa';
+const app = new Koa();
+
+// Assuming you're using koa-bodyparser
+app.use(async ctx => {
+  if (ctx.path === '/users' && ctx.method === 'POST') {
+    const body = ctx.request.body;
+    
+    if (!body || !body.email) {
+      ctx.status = 400;
+      ctx.body = { error: 'Missing required field: email' };
+      return;
+    }
+    
+    // ... create user
+  }
+});
+```
+
+  </TabItem>
+</Tabs>
