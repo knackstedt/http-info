@@ -86,3 +86,9 @@ h3 {
 .sl-markdown-content {
     margin-top: 0 !important;
 }
+
+/* Adjust SPA View Transition Speed */
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 200ms;
+}

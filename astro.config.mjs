@@ -19,6 +19,9 @@ export default defineConfig({
             ],
             title: 'HTTP Info',
             description: 'A comprehensive reference for HTTP verbs, status codes, and headers',
+            components: {
+                Head: './src/components/Head.astro',
+            },
             social: [
                 { label: 'GitHub', href: 'https://github.com/knackstedt/http-info', icon: 'github' },
             ],
@@ -40,6 +43,10 @@ export default defineConfig({
                 {
                     label: 'Headers',
                     autogenerate: { directory: 'headers' }
+                },
+                {
+                    label: 'Reference',
+                    autogenerate: { directory: 'reference' }
                 },
                 {
                     label: 'Glossary',
